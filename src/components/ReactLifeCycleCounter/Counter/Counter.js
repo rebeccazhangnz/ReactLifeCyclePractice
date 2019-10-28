@@ -3,7 +3,7 @@ import React from 'react';
 //this is an example component which used to triggered componentDidCatch
 const ErrorComponent = () => {
     return new Error('This component failed');
-}
+};
 
 class Counter extends React.Component {
     //constructor takes props as its object

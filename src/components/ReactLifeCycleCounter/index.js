@@ -1,1 +1,1 @@
-export { default } from './ReactLifeCycleCounter'
+export { default } from './ReactLifeCycleCounter';
