@@ -1,5 +1,6 @@
 import React from 'react';
 import Counter from './Counter/Counter';
+import ErrorBoundry from './ErrorBoundry';
 
 class ReactLifeCycleCounter extends React.Component {
     //constructor takes props as its object
@@ -13,6 +14,8 @@ class ReactLifeCycleCounter extends React.Component {
             mount: true,
             ignorePropValue: 0,
             randomPropValue: 1,
+            showErrorComponent: false,
+            hasError: false,
         };
 
         this.mountCounter = () => this.setState({ mount: true });
@@ -20,9 +23,18 @@ class ReactLifeCycleCounter extends React.Component {
         this.ignorePropChange = () => this.setState({ ignorePropValue: Math.random() });
         this.randomValueGenerator = () =>
             this.setState({ randomPropValue: Number.parseInt(Math.random() * 100) });
+        this.toggleErrorComponent = () =>
+            this.setState({ showErrorComponent: !this.state.showErrorComponent });
+        this.onCatchError = (errorState) => {
+            this.setState({ hasError: errorState });
+        };
+        this.resetError = () => {
+            this.setState({ hasError: false, showErrorComponent: false });
+        };
     }
 
     render() {
+        console.log(this.state.hasError, this.state.showErrorComponent);
         return (
             <>
                 <button onClick={this.mountCounter} disabled={this.state.mount}>
@@ -32,12 +44,20 @@ class ReactLifeCycleCounter extends React.Component {
                     UnMount Counter
                 </button>
                 <button onClick={this.ignorePropChange}>Ignore Prop Change</button>
-                <button onClick={this.randomValueGenerator}>Generate a random value for the counter</button>
+                <button onClick={this.randomValueGenerator}>
+                    Generate a random value for the counter
+                </button>
+                <button onClick={this.toggleErrorComponent}>Toggle Error Component</button>
+                <button onClick={this.resetError}>Reset Error</button>
+
                 {this.state.mount ? (
-                    <Counter
-                        ignorePropValue={this.state.ignorePropValue}
-                        randomPropValue={this.state.randomPropValue}
-                    />
+                    <ErrorBoundry hasError={this.state.hasError} onCatchError={this.onCatchError}>
+                        <Counter
+                            ignorePropValue={this.state.ignorePropValue}
+                            randomPropValue={this.state.randomPropValue}
+                            showErrorComponent={this.state.showErrorComponent}
+                        />
+                    </ErrorBoundry>
                 ) : null}
             </>
         );
